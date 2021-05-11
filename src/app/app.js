@@ -16,9 +16,14 @@ export default function createScatterPlot(dataset) {
 
   // Create x-axis
   const years = dataset.map((d) => new Date(d["Year"], 0));
+
+  const minYear = new Date(d3.min(years).getTime());
+  minYear.setFullYear(minYear.getFullYear() - 1);
+  const maxYear = new Date(d3.max(years).getTime());
+  maxYear.setFullYear(maxYear.getFullYear() + 1);
   const xScale = d3
     .scaleTime()
-    .domain([d3.min(years), d3.max(years)])
+    .domain([minYear, maxYear])
     .range([padWidth, width - padWidth]);
   const xAxis = d3.axisBottom(xScale);
 
@@ -39,9 +44,14 @@ export default function createScatterPlot(dataset) {
 
   // Create y-axis
   const times = dataset.map((d) => new Date(0, 0, 0, 0, 0, d["Seconds"]));
+
+  const minTime = new Date(d3.min(times).getTime());
+  minTime.setSeconds(minTime.getSeconds() - 10);
+  const maxTime = new Date(d3.max(times).getTime());
+  maxTime.setSeconds(maxTime.getSeconds() + 10);
   const yScale = d3
     .scaleTime()
-    .domain([d3.min(times), d3.max(times)])
+    .domain([minTime, maxTime])
     .range([height - padHeight, padHeight]);
   const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
 
@@ -60,4 +70,17 @@ export default function createScatterPlot(dataset) {
     .attr("transform", "rotate(-90)")
     .attr("x", "-24%")
     .attr("y", "6%");
+
+  // Plot scatter points
+  svg
+    .selectAll("circle")
+    .data(dataset)
+    .enter()
+    .append("circle")
+    .attr("cx", (d, i) => xScale(years[i]))
+    .attr("cy", (d, i) => yScale(times[i]))
+    .attr("r", 3)
+    .attr("class", "dot")
+    .attr("data-xvalue", (d, i) => years[i])
+    .attr("data-yvalue", (d, i) => times[i]);
 }
