@@ -50,4 +50,14 @@ export default function createScatterPlot(dataset) {
     .call(yAxis)
     .attr("id", "y-axis")
     .attr("transform", `translate(${padWidth}, 0)`);
+
+  // Label y-axis
+  svg
+    .append("text")
+    .text("Race Time (M:S)")
+    .attr("id", "y-axis-label")
+    .attr("class", "axis-label")
+    .attr("transform", "rotate(-90)")
+    .attr("x", "-24%")
+    .attr("y", "6%");
 }
