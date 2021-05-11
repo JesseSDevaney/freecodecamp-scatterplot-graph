@@ -72,6 +72,8 @@ export default function createScatterPlot(dataset) {
     .attr("y", "6%");
 
   // Plot scatter points
+  const colors = ["red", "blue"];
+
   svg
     .selectAll("circle")
     .data(dataset)
@@ -80,6 +82,7 @@ export default function createScatterPlot(dataset) {
     .attr("cx", (d, i) => xScale(years[i]))
     .attr("cy", (d, i) => yScale(times[i]))
     .attr("r", 3)
+    .attr("fill", (d) => (d["Doping"] === "" ? colors[1] : colors[0]))
     .attr("class", "dot")
     .attr("data-xvalue", (d, i) => years[i])
     .attr("data-yvalue", (d, i) => times[i])
@@ -117,4 +120,31 @@ export default function createScatterPlot(dataset) {
     .attr("y", "5%")
     .attr("dominant-baseline", "middle")
     .attr("text-anchor", "middle");
+
+  // Plot legend
+  const legend = svg.append("svg").attr("id", "legend");
+  const legendKeys = ["Doping Allegations", "No Allegations"];
+  const dotSize = 5;
+  legend
+    .selectAll("legendDots")
+    .data(legendKeys)
+    .enter()
+    .append("circle")
+    .attr("class", "legend-dot")
+    .attr("cx", width - padWidth)
+    .attr("cy", (d, i) => height / 2 + i * (2 * dotSize + 2))
+    .attr("r", dotSize)
+    .style("fill", (d, i) => colors[i]);
+
+  legend
+    .selectAll("legendLabels")
+    .data(legendKeys)
+    .enter()
+    .append("text")
+    .text((d) => d)
+    .attr("class", "legend-label")
+    .attr("x", width - padWidth + dotSize + 3)
+    .attr("y", (d, i) => height / 2 + i * (2 * dotSize + 2))
+    .attr("text-anchor", "left")
+    .attr("alignment-baseline", "middle");
 }
