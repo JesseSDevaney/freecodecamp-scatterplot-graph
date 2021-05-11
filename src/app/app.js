@@ -83,4 +83,14 @@ export default function createScatterPlot(dataset) {
     .attr("class", "dot")
     .attr("data-xvalue", (d, i) => years[i])
     .attr("data-yvalue", (d, i) => times[i]);
+
+  // Plot title
+  svg
+    .append("text")
+    .text("Doping Allegations and Race Times in Cycling")
+    .attr("id", "title")
+    .attr("x", "50%")
+    .attr("y", "5%")
+    .attr("dominant-baseline", "middle")
+    .attr("text-anchor", "middle");
 }
