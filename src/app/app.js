@@ -82,7 +82,31 @@ export default function createScatterPlot(dataset) {
     .attr("r", 3)
     .attr("class", "dot")
     .attr("data-xvalue", (d, i) => years[i])
-    .attr("data-yvalue", (d, i) => times[i]);
+    .attr("data-yvalue", (d, i) => times[i])
+    .on("mouseover", (event, d) => {
+      const { x, y } = event;
+
+      const tooltip = document.createElement("div");
+      tooltip.setAttribute("id", "tooltip");
+      tooltip.setAttribute("data-year", d["Year"]);
+      tooltip.style.left = `${x + 20}px`;
+      tooltip.style.top = `${y + 20}px`;
+      tooltip.appendChild(
+        document.createTextNode(
+          `Time: ${d["Time"]}` +
+            `\nYear: ${d["Year"]}` +
+            `\nPlace: ${d["Place"]}` +
+            `\nName: ${d["Name"]}` +
+            `\nNationality: ${d["Nationality"]}` +
+            `\nDoping Allegations: ${d["Doping"]}` +
+            `\nMore Info at: ${d["URL"]}`
+        )
+      );
+      document.body.appendChild(tooltip);
+    })
+    .on("mouseout", () => {
+      document.getElementById("tooltip").remove();
+    });
 
   // Plot title
   svg
