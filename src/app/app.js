@@ -31,9 +31,23 @@ export default function createScatterPlot(dataset) {
   // Label x-axis
   svg
     .append("text")
-    .text("Years")
+    .text("Year of Race")
     .attr("id", "x-axis-label")
     .attr("class", "axis-label")
-    .attr("x", "80%")
+    .attr("x", "77%")
     .attr("y", "97%");
+
+  // Create y-axis
+  const times = dataset.map((d) => new Date(0, 0, 0, 0, 0, d["Seconds"]));
+  const yScale = d3
+    .scaleTime()
+    .domain([d3.min(times), d3.max(times)])
+    .range([height - padHeight, padHeight]);
+  const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
+
+  svg
+    .append("g")
+    .call(yAxis)
+    .attr("id", "y-axis")
+    .attr("transform", `translate(${padWidth}, 0)`);
 }
