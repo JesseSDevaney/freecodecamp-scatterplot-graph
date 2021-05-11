@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import "./app.scss";
 
-export default function createScatterPlot() {
+export default function createScatterPlot(dataset) {
   const width = 800;
   const height = 450;
 
